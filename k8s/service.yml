@@ -7,7 +7,7 @@ spec:
   selector:
     app: apollo-mitmproxy
   ports:
-  - name: wireguard-proxy
+  - name: mitmproxy-proxy
     port: 8080
     targetPort: 8080
     nodePort: 30000

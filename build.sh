@@ -14,10 +14,10 @@ echo 'ℹ️  Built apollo-mitmproxy image'
 
 
 # -- K8s --
-cd $CURRENT_DIR
+cd $CURRENT_DIR/k8s
 echo 'ℹ️  Applying k8s manifests'
-kubectl apply -f k8s/deployment.yml
-kubectl apply -f k8s/service.yml
+kubectl apply -f deployment.yml
+kubectl apply -f service.yml
 
-#kubectl apply -f k8s/nip.io/ingress.yaml
-#kubectl apply -f k8s/nip.io/service.yaml
+#kubectl apply -f nip.io/ingress.yaml
+#kubectl apply -f nip.io/service.yaml

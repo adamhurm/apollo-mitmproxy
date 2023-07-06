@@ -2,27 +2,26 @@
 No jailbreak or developer certificates required! Tested on iOS 16.5.1.
 
 Follow the Guide below:
-- [Download](#Download-Apollo-IPA) and [install](#Install-Apollo-IPA) Apollo IPA
-- [Get a personal API token](#Create-custom-reddit-app-and-get-client_id)
-- [Replace the client_id](#Use-mitmproxy-to-replace-client_id) in [docker/apollo_mitmproxy_script.py](docker/apollo_mitmproxy_script.py) (Line 6)
+- [Download](#download-apollo-ipa) and [install](#install-apollo-ipa) Apollo IPA
+- [Get a personal API token](#create-custom-reddit-app-and-get-client_id)
+- [Replace the client_id](#use-mitmproxy-to-replace-client_id) in [docker/apollo_mitmproxy_script.py](https://github.com/adamhurm/apollo-mitmproxy/blob/main/docker/apollo_mitmproxy_script.py#L6) (Line 6)
 
 
-Create docker image and run in k8s deployment. Right now this exposes the proxy (port 30000) and the mitmweb GUI (port 30001) as NodePorts.(optional support for `docker compose`)
+Create docker image and run in k8s deployment. Right now this exposes the proxy (port 30000) and the mitmweb GUI (port 30001) as NodePorts. (optional support for `docker compose`)
 ```
 chmod +x build.sh
 ./build.sh
 ```
 
-- [Configure device proxy](#Configure-proxy-on-iOS-device)
+- [Configure device proxy](#configure-proxy-on-iOS-device)
   - Server: IP of node that is running k8s pod
   - Port: 30000
 
 Unfortunately this solution relies on a OAuth token refresh after 24h. That means you'll need to set up the proxy once a day. A much cleaner solution is to use `mitmweb --mode wireguard` so that you can toggle it once a day instead of having to type in proxy configuration. I can't find a way to get it working in docker at the moment since wireguard mode is in beta and it doesn't appear to support listening on all interfaces.
 
-<br>
 
 # Guide
-This is a summary of a few different guides. All credit to the [References](#References) for creating the solution below.
+This is a summary of a few different guides. All credit to the [References](#references) for creating the solution below.
 
 ### Download Apollo IPA
 ℹ️ Windows is required for this portion due to the older version of iTunes.
@@ -48,8 +47,8 @@ $ ios-deploy -b apollo_unpacked/Payload/Apollo.app
 ```
 
 ### Create custom reddit app and get client_id
-[https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps)
-Create a new "Installed App" and set "redirect uri": `apollo://reddit-oauth`
+[https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps)<br>
+Create a new "Installed App" and set "redirect uri": `apollo://reddit-oauth`<br>
 Copy client_id under the created application. This will be used in `apollo_mitmproxy_script.py`.
 
 ### Use mitmproxy to replace client_id
@@ -66,8 +65,8 @@ $ mitmdump -s apollo_mitmproxy_script.py
 ```
 
 ### Configure proxy on iOS device
-On iOS, open your Wi-Fi network configuration and set up a "Manual" proxy pointing to macOS machine's local IP and port 8080 (default for mitmproxy, you can change this).
-In Safari, download CA certificate via http://mitm.it.
+On iOS, open your Wi-Fi network configuration and set up a "Manual" proxy pointing to macOS machine's local IP and port 8080 (default for mitmproxy, you can change this).<br>
+In Safari, download CA certificate via http://mitm.it.<br>
 In Settings, trust downloaded profile twice (second one is hidden under General > About > Certificate Trust Settings).
 
 Open Apollo and sign in. You should see the name of your custom app on the OAuth prompt before clicking "Allow".
@@ -79,7 +78,7 @@ Enjoy! Now you can turn off any proxy configuration and delete any profiles crea
 - [ ] turn the IPA download process into a mitmproxy script
 
 ------
-# References:
+# References
 - https://www.reddit.com/r/apolloapp/comments/14o2b0p/downgrade_and_get_apollo_working_wout_having_a/
 - https://github.com/qnblackcat/How-to-Downgrade-apps-on-AppStore-with-iTunes-and-Charles-Proxy
 - https://www.reddit.com/r/apolloapp/comments/14iub7y/backup_apollo_app_version_0159_if_you_want_to_use/jpjqaf5/?context=3

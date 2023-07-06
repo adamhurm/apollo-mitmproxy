@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: apollo-mitmproxy
+  namespace: apollo
+spec:
+  rules:
+  - host: apollo.10.0.0.200.nip.io
+    http:
+      paths:
+      - backend:
+          service:
+            name: apollo-mitmproxy
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - apollo.10.0.0.200.nip.io

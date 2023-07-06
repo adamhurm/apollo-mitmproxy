@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apollo-mitmproxy
+  namespace: apollo
+spec:
+  selector:
+    matchLabels:
+      app: apollo-mitmproxy
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apollo-mitmproxy
+    spec:
+      containers:
+      - name: apollo-mitmproxy-container
+        image: adamhurm/apollo-mitmproxy:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        - containerPort: 51820
+          protocol: TCP
+        - containerPort: 51820
+          protocol: UDP
+        resources:
+          limits:
+            cpu: 1.0
+            memory: 256Mi

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: apollo-mitmproxy
+  namespace: apollo
+spec:
+  selector:
+    app: apollo-mitmproxy
+  ports:
+  - port: 8080
+    targetPort: 8081
+  type: ClusterIP

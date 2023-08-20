@@ -1,10 +1,13 @@
 #!/bin/bash
 
 CURRENT_DIR=$PWD
+MITMPROXY_VERSION=10.0.0
+MITMPROXY_WHEEL=mitmproxy-$MITMPROXY_VERSION-py3-none-any.whl
+MITMPROXY_URL=https://downloads.mitmproxy.org/$MITMPROXY_VERSION/$MITMPROXY_WHEEL
 
 # -- Docker --
 cd $CURRENT_DIR/docker
-docker build -t adamhurm/apollo-mitmproxy . 
+docker build -t adamhurm/apollo-mitmproxy --build-arg MITMPROXY_WHEEL=$MITMPROXY_WHEEL . 
 echo 'ℹ️  Built apollo-mitmproxy image'
 
 #docker save -o apollo-mitmproxy.tar adamhurm/apollo-mitmproxy:latest

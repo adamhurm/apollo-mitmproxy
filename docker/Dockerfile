@@ -1,10 +1,25 @@
-FROM alpine:latest
+FROM python:3.11-bullseye as wheelbuilder
 
-RUN apk add --no-cache python3 py3-pip python3-dev rust cargo libffi-dev
-RUN pip install mitmproxy
+ARG MITMPROXY_WHEEL
+COPY $MITMPROXY_WHEEL /wheels/
+RUN pip install wheel && pip wheel --wheel-dir /wheels /wheels/${MITMPROXY_WHEEL}
 
-COPY apollo_mitmproxy_script.py .
+FROM python:3.11-slim-bullseye
 
-EXPOSE 8080 8081
+RUN useradd -mU mitmproxy
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gosu nano \
+    && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["mitmweb", "-s", "apollo_mitmproxy_script.py", "--web-host", "0.0.0.0", "--listen-host", "0.0.0.0"]
+COPY --from=wheelbuilder /wheels /wheels
+RUN pip install --no-index --find-links=/wheels mitmproxy
+RUN rm -rf /wheels
+
+VOLUME /home/mitmproxy/.mitmproxy
+
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 8080
+
+CMD ["mitmproxy", "-s", "apollo_mitmproxy_script.py", "--web-host", "0.0.0.0", "--listen-host", "0.0.0.0"]

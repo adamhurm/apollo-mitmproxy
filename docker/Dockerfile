@@ -22,4 +22,6 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 8080
 
-CMD ["mitmproxy", "-s", "apollo_mitmproxy_script.py", "--web-host", "0.0.0.0", "--listen-host", "0.0.0.0"]
+COPY apollo_mitmproxy_script.py .
+
+CMD ["mitmdump", "-s", "apollo_mitmproxy_script.py", "--listen-host", "0.0.0.0"]

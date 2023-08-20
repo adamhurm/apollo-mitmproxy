@@ -18,12 +18,8 @@ spec:
         image: adamhurm/apollo-mitmproxy:latest
         imagePullPolicy: Never
         ports:
-        - containerPort: 8081
+        - containerPort: 8080
           protocol: TCP
-        - containerPort: 51820
-          protocol: TCP
-        - containerPort: 51820
-          protocol: UDP
         resources:
           limits:
             cpu: 1.0

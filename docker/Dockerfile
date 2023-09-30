@@ -18,10 +18,10 @@ RUN rm -rf /wheels
 VOLUME /home/mitmproxy/.mitmproxy
 
 COPY docker-entrypoint.sh /usr/local/bin/
+COPY apollo_mitmproxy_script.py .
+RUN chmod +x docker-entrypoint.sh && chmod +x apollo_mitmproxy_script.py
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 8080
-
-COPY apollo_mitmproxy_script.py .
 
 CMD ["mitmdump", "-s", "apollo_mitmproxy_script.py", "--listen-host", "0.0.0.0"]

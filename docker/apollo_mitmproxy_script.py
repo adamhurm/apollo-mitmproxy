@@ -1,9 +1,10 @@
 import mitmproxy
 from mitmproxy import ctx
 from base64 import b64encode
+import os
 
 origin_client_id = "5JHxEu-4wnFfBA"
-custom_client_id = "REPLACE_ME"
+custom_client_id = os.environ["REDDIT_API_TOKEN"]
 
 authorize_url = f"reddit.com/api/v1/authorize?client_id={origin_client_id}"
 wanted_url = f"https://www.reddit.com/api/v1/authorize?client_id={custom_client_id}&response_type=code&state=RedditKit&redirect_uri=apollo://reddit-oauth&duration=permanent&scope=account,creddits,edit,flair,history,identity,livemanage,modconfig,modflair,modlog,modothers,modposts,modself,modwiki,mysubreddits,privatemessages,read,report,save,submit,subscribe,vote,wikiedit,wikiread,modcontributors,modtraffic,modmail,structuredstyles"

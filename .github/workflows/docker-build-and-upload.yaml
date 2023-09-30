@@ -1,4 +1,5 @@
 # REMINDER: Update the commit SHA for the docker actions periodically
+# REMINDER: Update the build-args because I can't use environmental variables
 
 name: Publish Docker image
 
@@ -45,7 +46,7 @@ jobs:
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           build-args: |
-            MITMPROXY_WHEEL=$MITMPROXY_WHL
+            MITMPROXY_WHEEL=mitmproxy-10.0.0-py3-none-any.whl
           context: ./docker/
           platforms: linux/amd64, linux/arm64
           file: ./docker/Dockerfile

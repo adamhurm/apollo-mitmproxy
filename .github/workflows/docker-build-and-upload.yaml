@@ -50,7 +50,6 @@ jobs:
             MITMPROXY_WHEEL=mitmproxy-10.0.0-py3-none-any.whl
           context: ./docker/
           platforms: linux/amd64, linux/arm64
-          file: ./docker/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

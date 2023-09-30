@@ -19,7 +19,6 @@ VOLUME /home/mitmproxy/.mitmproxy
 
 COPY docker-entrypoint.sh /usr/local/bin/
 COPY apollo_mitmproxy_script.py .
-RUN chmod +x docker-entrypoint.sh && chmod +x apollo_mitmproxy_script.py
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 8080

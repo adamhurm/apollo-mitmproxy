@@ -1,7 +1,6 @@
 # How to keep using Apollo after Reddit API changes
-No jailbreak or developer certificates required! Tested on iOS 16.5.1.
+No jailbreak or developer certificates required!
 
-Follow the Guide below:
 - [Download](#download-apollo-ipa) and [install](#install-apollo-ipa) Apollo IPA
 - [Get a personal API token](#create-custom-reddit-app-and-get-client_id)
 - [Replace the client_id](#use-mitmproxy-to-replace-client_id) in [docker/apollo_mitmproxy_script.py](https://github.com/adamhurm/apollo-mitmproxy/blob/main/docker/apollo_mitmproxy_script.py#L6) (Line 6)
@@ -27,14 +26,15 @@ This is a summary of a few different guides. All credit to the [References](#ref
 ℹ️ Windows is required for this portion due to the older version of iTunes.
 
 Follow [this guide](https://github.com/qnblackcat/How-to-Downgrade-apps-on-AppStore-with-iTunes-and-Charles-Proxy) to get Apollo 1.15.9 IPA with iTunes 12.6.5 and Charles Proxy.
-
-Essentially use any system proxy when downloading Apollo from iTunes to capture HTTP traffic. Then edit `p*-buy.itunes.apple.com/WebObjects/MZBuy.woa/wa/buyProduct`
-request and replace `appExtVersId` with `857705900` (Apollo Version 1.15.9)
+1. Set up an interactive https proxy ([mitmproxy](https://mitmproxy.org/),[Burp](https://portswigger.net/burp/communitydownload),[Charles](https://www.charlesproxy.com/download/)).
+2. Configure your system's network connection to use proxy from step 1. 
+3. Capture the request that downloads Apollo from iTunes:
+   Edit `p*-buy.itunes.apple.com/WebObjects/MZBuy.woa/wa/buyProduct` request and replace `appExtVersId` with `857705900` (Apollo Version 1.15.9)
 
 📝 This IPA is encrypted and tied to the Apple ID that was used in iTunes when it was downloaded. You can't use this IPA across different Apple IDs without re-signing (requires developer certificate) or disabling app signing (requires jailbreak).
 
 ### Install Apollo IPA
-ℹ The rest of this guide uses macOS.
+ℹ The rest of this guide uses macOS
 
 On your iOS device, open Settings and go to General > iPhone Storage > Apollo in order to "Offload App".
 
@@ -49,15 +49,17 @@ $ ios-deploy -b apollo_unpacked/Payload/Apollo.app
 ### Create custom reddit app and get client_id
 [https://www.reddit.com/prefs/apps](https://www.reddit.com/prefs/apps)<br>
 Create a new "Installed App" and set "redirect uri": `apollo://reddit-oauth`<br>
-Copy client_id under the created application. This will be used in `apollo_mitmproxy_script.py`.
+Copy _client_id_ under the created application. This will be used in `apollo_mitmproxy_script.py`.
 
 ### Use mitmproxy to replace client_id
-Replace client_id in docker/apollo_mitmproxy_script.py
+Replace _client_id_ in [docker/apollo_mitmproxy_script.py](./docker/apollo_mitmproxy_script.py) (credit to [No-Cherry-5766](https://www.reddit.com/r/apolloapp/comments/14iub7y/comment/jpjqaf5/)):
 
 ```python
 # apollo_mitmproxy_script.py
 custom_client_id = "REPLACE_ME" <----
 ```
+
+If you want to use this outside of docker, run mitmproxy with the script:
 
 ```bash
 $ brew install mitmproxy
@@ -71,7 +73,7 @@ In Settings, trust downloaded profile twice (second one is hidden under General 
 
 Open Apollo and sign in. You should see the name of your custom app on the OAuth prompt before clicking "Allow".
 
-Enjoy! Now you can turn off any proxy configuration and delete any profiles created.
+Enjoy! Now you can turn off the proxy configuration. You may also want to delete profiles if you are not actively using them.
 
 ## To-do
 - [ ] add details on how to block apolloreq.com

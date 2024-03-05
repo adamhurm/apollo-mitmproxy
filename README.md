@@ -5,8 +5,8 @@ No jailbreak or developer certificates required!
 - [Get a personal API token](#create-custom-reddit-app-and-get-client_id)
 - [Replace the client_id](#use-mitmproxy-to-replace-client_id) in [docker/apollo_mitmproxy_script.py](https://github.com/adamhurm/apollo-mitmproxy/blob/main/docker/apollo_mitmproxy_script.py#L6) (Line 6)
 
-
-Create docker image and run in k8s deployment. Right now this exposes the proxy (port 30000) and the mitmweb GUI (port 30001) as NodePorts. (optional support for `docker compose`)
+## Docker / K8s
+The proxy (port 30000) and the mitmweb GUI (port 30001) are exposed as NodePorts. You can modify this to use nip.io if you remove the commented lines in [build.sh](./build.sh) and add your local IP to the [manifest files](./k8s/nip.io/ingess.yml). There is also optional support for [docker compose](./docker).
 ```
 chmod +x build.sh
 ./build.sh
@@ -23,7 +23,7 @@ Unfortunately this solution relies on a OAuth token refresh after 24h. That mean
 This is a summary of a few different guides. All credit to the [References](#references) for creating the solution below.
 
 ### Download Apollo IPA
-ℹ️ Windows is required for this portion due to the older version of iTunes.
+ℹ️ This step requires Windows to use the older iTunes version.
 
 Follow [this guide](https://github.com/qnblackcat/How-to-Downgrade-apps-on-AppStore-with-iTunes-and-Charles-Proxy) to get Apollo 1.15.9 IPA with iTunes 12.6.5 and Charles Proxy.
 1. Set up an interactive https proxy ([mitmproxy](https://mitmproxy.org/),[Burp](https://portswigger.net/burp/communitydownload),[Charles](https://www.charlesproxy.com/download/)).
@@ -34,7 +34,7 @@ Follow [this guide](https://github.com/qnblackcat/How-to-Downgrade-apps-on-AppSt
 📝 This IPA is encrypted and tied to the Apple ID that was used in iTunes when it was downloaded. You can't use this IPA across different Apple IDs without re-signing (requires developer certificate) or disabling app signing (requires jailbreak).
 
 ### Install Apollo IPA
-ℹ The rest of this guide uses macOS
+ℹ This step requires macOS
 
 On your iOS device, open Settings and go to General > iPhone Storage > Apollo in order to "Offload App".
 
@@ -67,7 +67,7 @@ $ mitmdump -s apollo_mitmproxy_script.py
 ```
 
 ### Configure proxy on iOS device
-On iOS, open your Wi-Fi network configuration and set up a "Manual" proxy pointing to macOS machine's local IP and port 8080 (default for mitmproxy, you can change this).<br>
+On iOS, open your Wi-Fi network configuration and set up a "Manual" proxy pointing to macOS machine's local IP and port 30000 (or default 8080 for mitmproxy).<br>
 In Safari, download CA certificate via http://mitm.it.<br>
 In Settings, trust downloaded profile twice (second one is hidden under General > About > Certificate Trust Settings).
 
